@@ -4,34 +4,38 @@ function App() {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState([]);
+  const [chatHistory, setChatHistory] = useState([]);
 
   const handleSubmit = async () => {
-    if (!prompt) return;
+  if (!prompt) return;
 
-    setLoading(true);
-    setResponse("");
+  setLoading(true);
+  setResponse("");
 
-    try {
-      // simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+  try {
+    // simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // mock AI response
-      const aiResponse = `AI Response: ${prompt} is a concept related to intelligent systems that can learn, think, and solve problems like humans.`;
+    const aiResponse = `AI Response: ${prompt} is a concept related to intelligent systems that can learn, think, and solve problems like humans.`;
 
-      setResponse(aiResponse);
-      setHistory([...history, { prompt, response: aiResponse }]);
-    } catch (error) {
-      setResponse("Something went wrong!");
-    }
+    setResponse(aiResponse);
 
-    setLoading(false);
-  };
+    setChatHistory((prev) => [
+      ...prev,
+      { prompt, response: aiResponse },
+    ]);
+
+  } catch (error) {
+    setResponse("Something went wrong!");
+  }
+
+  setLoading(false);
+};
 
   const clearAll = () => {
     setPrompt("");
     setResponse("");
-    setHistory([]);
+    setChatHistory([]);
   };
 
   return (
@@ -68,9 +72,9 @@ function App() {
 
       <h2>Chat History</h2>
 
-      {history.length === 0 && <p>No history yet</p>}
+      {chatHistory.length === 0 && <p>No history yet</p>}
 
-      {history.map((item, index) => (
+      {chatHistory.map((item, index) => (
         <div key={index} style={styles.historyBox}>
           <p><strong>Q:</strong> {item.prompt}</p>
           <p><strong>A:</strong> {item.response}</p>
